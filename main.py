@@ -31,8 +31,8 @@ def get_pic_from_dir(dir_path):
 
 
 # 读入系统提供的数据
-dataset = os.getenv("ENV_DATASET", "datasets/basedata")  # 基础数据集
-c_dataset = os.getenv("ENV_CHILDDATASET", "datasets/childdata")  # 子数据集
+dataset = os.getenv("ENV_DATASET", "datasets/demobasedata")  # 基础数据集
+c_dataset = os.getenv("ENV_CHILDDATASET", "datasets/demochilddata")  # 子数据集
 save_path = os.getenv("ENV_RESULT", "datasets/result")  # 中间结果存储路径
 no = os.getenv("ENV_NO", "0302")  # 结果文件的no
 print(f"基础数据集：{dataset}")
