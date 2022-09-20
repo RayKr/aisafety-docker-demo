@@ -31,10 +31,11 @@ def get_pic_from_dir(dir_path):
 
 
 # 读入系统提供的数据
-dataset = os.getenv("ENV_DATASET", "datasets/data")  # 基础数据集
-c_dataset = os.getenv("ENV_CHILDDATASET", "datasets/cdata")  # 子数据集
-save_path = os.getenv("ENV_RESULT", "datasets/result")  # 中间结果存储路径
-no = os.getenv("ENV_NO", "0302")  # 结果文件的no
+# 注：default填写本地的路径并不影响平台，真正在平台运行评测的时候，会获取到真正的环境变量值
+dataset = os.getenv("ENV_DATASET", default="datasets/data")  # 基础数据集
+c_dataset = os.getenv("ENV_CHILDDATASET", default="datasets/cdata")  # 子数据集
+save_path = os.getenv("ENV_RESULT", default="datasets/result")  # 中间结果存储路径
+no = os.getenv("ENV_NO", default="0302")  # 结果文件的no
 print(f"基础数据集：{dataset}")
 print(f"子数据集：{c_dataset}")
 print(f"结果文件路径：{save_path}")
