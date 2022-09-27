@@ -5,7 +5,6 @@ from torchvision import transforms
 import numpy as np
 import cv2
 import json
-from models.ResNet2 import getModel
 
 
 def get_pic_from_dir(dir_path, transform):
@@ -33,8 +32,8 @@ def get_pic_from_dir(dir_path, transform):
 
 # 读入系统提供的数据
 # 注：default填写本地的路径并不影响平台，真正在平台运行评测的时候，会获取到真正的环境变量值
-dataset = os.getenv("ENV_DATASET", default="datasets/data")  # 基础数据集
-c_dataset = os.getenv("ENV_CHILDDATASET", default="datasets/cdata")  # 子数据集
+dataset = os.getenv("ENV_DATASET", default="datasets/demo/data")  # 基础数据集
+c_dataset = os.getenv("ENV_CHILDDATASET", default="datasets/demo/cdata")  # 子数据集
 save_path = os.getenv("ENV_RESULT", default="datasets/result")  # 中间结果存储路径
 no = os.getenv("ENV_NO", default="0302")  # 结果文件的no
 print(f"基础数据集：{dataset}")
@@ -64,6 +63,7 @@ def inference(model: nn.Module, checkpoint: str):
     with torch.no_grad():
         ret = model(torch.from_numpy(origin_data).float().to(device))
     result_dic["model"]["BDResult"] = ret.tolist()
+    print("BDResult推理完成！")
 
     # 推理攻击样本
     for c_dir in os.listdir(c_dataset):
@@ -74,6 +74,7 @@ def inference(model: nn.Module, checkpoint: str):
             if "CDResult" not in result_dic["model"]:
                 result_dic["model"]["CDResult"] = {}
             result_dic["model"]["CDResult"][c_dir] = ret.tolist()
+    print("CDResult推理完成！")
 
     # 保存预测结果
     if not os.path.exists(save_path):
@@ -81,6 +82,5 @@ def inference(model: nn.Module, checkpoint: str):
     with open(os.path.join(save_path, no + ".json"), "w") as f:
         json.dump(result_dic, f)
 
-    print("JSON Result:")
-    print(result_dic)
+    print("JSON Result saved.")
     return result_dic
