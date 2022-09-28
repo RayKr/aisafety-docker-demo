@@ -39,9 +39,9 @@ def get_pic_from_dir(dir_path, transform):
 
 # 读入系统提供的数据
 # 注：default填写本地的路径并不影响平台，真正在平台运行评测的时候，会获取到真正的环境变量值
-dataset = os.getenv("ENV_DATASET", default="datasets/users/ImageNet1000_100")  # 基础数据集
+dataset = os.getenv("ENV_DATASET", default="datasets/demo/ImageNet1000_100")  # 基础数据集
 c_dataset = os.getenv(
-    "ENV_CHILDDATASET", default="datasets/users/fgsm_ImageNet1000_100"
+    "ENV_CHILDDATASET", default="datasets/demo/fgsm_ImageNet1000_100"
 )  # 子数据集
 save_path = os.getenv("ENV_RESULT", default="datasets/result")  # 中间结果存储路径
 no = os.getenv("ENV_NO", default="0305")  # 结果文件的no
@@ -54,14 +54,15 @@ result_dic = {"model": {}}
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
-def inference(model: nn.Module, checkpoint: str):
-    model.load_state_dict(torch.load(checkpoint, map_location=device))
+def inference(model: nn.Module, checkpoint: str = None):
+    if checkpoint:
+        model.load_state_dict(torch.load(checkpoint, map_location=device))
     model.eval()
     model.to(device)
     transform = transforms.Compose(
         [
             transforms.ToPILImage(),
-            transforms.Resize([32, 32]),
+            transforms.Resize([224, 224]),
             transforms.ToTensor(),
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
         ]
