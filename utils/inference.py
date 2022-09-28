@@ -23,11 +23,13 @@ def get_pic_from_dir(dir_path, transform):
     elif os.path.exists(os.path.join(dir_path, "images/")):
         img_data = []
         dir_path += "/images"
+        print(f"获取【{dir_path}】目录下文件：")
         for file_name in inorder_listdir(dir_path):
-            # print(file_name)
+            print(file_name)
             img = cv2.imread(os.path.join(dir_path, file_name))
             img = transform(img)
             img_data.append(img.numpy())
+        print("---------------------------")
         return np.array(img_data)
     else:
         raise Exception(
@@ -39,12 +41,12 @@ def get_pic_from_dir(dir_path, transform):
 
 # 读入系统提供的数据
 # 注：default填写本地的路径并不影响平台，真正在平台运行评测的时候，会获取到真正的环境变量值
-dataset = os.getenv("ENV_DATASET", default="datasets/demo/ImageNet1000_100")  # 基础数据集
+dataset = os.getenv("ENV_DATASET", default="demo/data/ImageNet1000_100")  # 基础数据集
 c_dataset = os.getenv(
-    "ENV_CHILDDATASET", default="datasets/demo/fgsm_ImageNet1000_100"
+    "ENV_CHILDDATASET", default="demo/data/fgsm_ImageNet1000_100"
 )  # 子数据集
-save_path = os.getenv("ENV_RESULT", default="datasets/result")  # 中间结果存储路径
-no = os.getenv("ENV_NO", default="0305")  # 结果文件的no
+save_path = os.getenv("ENV_RESULT", default="demo/result")  # 中间结果存储路径
+no = os.getenv("ENV_NO", default="demo")  # 结果文件的no
 print(f"基础数据集：{dataset}")
 print(f"子数据集：{c_dataset}")
 print(f"结果文件路径：{save_path}")

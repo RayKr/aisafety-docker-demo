@@ -3,4 +3,4 @@ Dockerfile
 .git
 .gitignore
 
-datasets/*
+demo/*
