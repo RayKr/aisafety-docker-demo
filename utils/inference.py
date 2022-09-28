@@ -24,7 +24,7 @@ def get_pic_from_dir(dir_path, transform):
         img_data = []
         dir_path += "/images"
         for file_name in inorder_listdir(dir_path):
-            print(file_name)
+            # print(file_name)
             img = cv2.imread(os.path.join(dir_path, file_name))
             img = transform(img)
             img_data.append(img.numpy())
