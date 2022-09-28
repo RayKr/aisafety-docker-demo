@@ -41,11 +41,11 @@ def get_pic_from_dir(dir_path, transform):
 
 # 读入系统提供的数据
 # 注：default填写本地的路径并不影响平台，真正在平台运行评测的时候，会获取到真正的环境变量值
-dataset = os.getenv("ENV_DATASET", default="demo/data/ImageNet1000_100")  # 基础数据集
+dataset = os.getenv("ENV_DATASET", default="data/ImageNet1000_100")  # 基础数据集
 c_dataset = os.getenv(
-    "ENV_CHILDDATASET", default="demo/data/fgsm_ImageNet1000_100"
+    "ENV_CHILDDATASET", default="data/fgsm_ImageNet1000_100"
 )  # 子数据集
-save_path = os.getenv("ENV_RESULT", default="demo/result")  # 中间结果存储路径
+save_path = os.getenv("ENV_RESULT", default="result")  # 中间结果存储路径
 no = os.getenv("ENV_NO", default="demo")  # 结果文件的no
 print(f"基础数据集：{dataset}")
 print(f"子数据集：{c_dataset}")
