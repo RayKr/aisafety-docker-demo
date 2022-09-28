@@ -7,8 +7,14 @@ import cv2
 import json
 
 
+def inorder_listdir(path):
+    l = os.listdir(path)
+    l.sort()
+    return l
+
+
 def get_pic_from_dir(dir_path, transform):
-    subPath = os.listdir(dir_path)
+    subPath = inorder_listdir(dir_path)
     if len(subPath) == 1 and subPath[0] != "images":
         dir_path = os.path.join(dir_path, subPath[0])
     if os.path.exists(os.path.join(dir_path, "inputs.npy")):
@@ -17,7 +23,8 @@ def get_pic_from_dir(dir_path, transform):
     elif os.path.exists(os.path.join(dir_path, "images/")):
         img_data = []
         dir_path += "/images"
-        for file_name in os.listdir(dir_path):
+        for file_name in inorder_listdir(dir_path):
+            print(file_name)
             img = cv2.imread(os.path.join(dir_path, file_name))
             img = transform(img)
             img_data.append(img.numpy())
@@ -25,7 +32,7 @@ def get_pic_from_dir(dir_path, transform):
     else:
         raise Exception(
             "The path {} do not has valid dataset {}".format(
-                dir_path, os.listdir(dir_path)
+                dir_path, inorder_listdir(dir_path)
             )
         )
 
@@ -33,7 +40,9 @@ def get_pic_from_dir(dir_path, transform):
 # 读入系统提供的数据
 # 注：default填写本地的路径并不影响平台，真正在平台运行评测的时候，会获取到真正的环境变量值
 dataset = os.getenv("ENV_DATASET", default="datasets/users/ImageNet1000_100")  # 基础数据集
-c_dataset = os.getenv("ENV_CHILDDATASET", default="datasets/users/fgsm_ImageNet1000_100")  # 子数据集
+c_dataset = os.getenv(
+    "ENV_CHILDDATASET", default="datasets/users/fgsm_ImageNet1000_100"
+)  # 子数据集
 save_path = os.getenv("ENV_RESULT", default="datasets/result")  # 中间结果存储路径
 no = os.getenv("ENV_NO", default="0305")  # 结果文件的no
 print(f"基础数据集：{dataset}")
@@ -66,7 +75,7 @@ def inference(model: nn.Module, checkpoint: str):
     print("BDResult推理完成！")
 
     # 推理攻击样本
-    for c_dir in os.listdir(c_dataset):
+    for c_dir in inorder_listdir(c_dataset):
         if os.path.isdir(c_dataset + "/" + c_dir):
             child_data = get_pic_from_dir(os.path.join(c_dataset, c_dir), transform)
             with torch.no_grad():
